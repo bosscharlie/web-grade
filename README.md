@@ -15,6 +15,8 @@ npm run serve
 
 开启前端页面路由，需要在`App.vue`中加入`<router-view/>`
 
+使用`axios`对后端进行`get`及`post`请求：http://www.axios-js.com/
+
 ### 后端(backend)
 
 基于Django实现，启动服务器
@@ -23,4 +25,6 @@ npm run serve
 cd backend
 python3 manage.py runserver
 ```
+
+数据库：`mysql`，通过django自带的api进行数据库的维护
 
