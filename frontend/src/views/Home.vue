@@ -2,15 +2,15 @@
   <div class="home">
     <el-row display="margin-top:10px">
         <el-input v-model="input" placeholder="请输入书名" style="display:inline-table; width: 30%; float:left"></el-input>
-        <el-button type="primary" @click="addBook()" style="float:left; margin: 2px;">新增</el-button>
+        <el-button type="primary" @click="add()" style="float:left; margin: 2px;">新增</el-button>
     </el-row>
     <el-row>
         <el-table :data="bookList" style="width: 100%" border>
           <el-table-column prop="id" label="编号" min-width="100">
             <template scope="scope"> {{ scope.row.pk }} </template>
           </el-table-column>
-          <el-table-column prop="book_name" label="书名" min-width="100">
-            <template scope="scope"> {{ scope.row.fields.book_name }} </template>
+          <el-table-column prop="book_name" label="Samples" min-width="100">
+            <template scope="scope"> {{ scope.row.fields.name }} </template>
           </el-table-column>
           <el-table-column prop="add_time" label="添加时间" min-width="100">
             <template scope="scope"> {{ scope.row.fields.add_time }} </template>
@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import Vue from 'vue'
 export default {
   name: 'home',
   data () {
@@ -30,31 +32,53 @@ export default {
     }
   },
   mounted: function () {
-    this.showBooks()
+    this.show()
   },
   methods: {
-    addBook () {
-      this.$http.get('http://127.0.0.1:8000/api/add_book?book_name=' + this.input)
-        .then((response) => {
-          var res = JSON.parse(response.bodyText)
-          if (res.error_num === 0) {
-            this.showBooks()
+    add: function () {
+      axios({
+        method:'post',
+        url:'http://127.0.0.1:8000/webapp/add/',
+        data:this.$qs.stringify({
+          post_name:this.input,
+        })
+      })
+        .then((response) =>{
+          var res = JSON.parse(JSON.stringify(response.data))
+          if (res.status === 0) {
+            console.log(res.msg)
+            this.show()
           } else {
-            this.$message.error('新增书籍失败，请重试')
-            console.log(res['msg'])
+            this.$message.error('an error appeared')
+            console.log(res.msg)
           }
         })
     },
-    showBooks () {
-      this.$http.get('http://127.0.0.1:8000/api/show_books')
-        .then((response) => {
-          var res = JSON.parse(response.bodyText)
-          console.log(res)
-          if (res.error_num === 0) {
-            this.bookList = res['list']
+    test: function(){
+      console.log('test')
+    },
+    show: function () {
+      // axios.get('http://127.0.0.1:8000/webapp/sample/')
+      //   .then((response) => {
+      //     var res = JSON.parse(JSON.stringify(response.data))
+      //     if (res.status === 0) {
+      //       this.bookList = res.list
+      //     } else {
+      //       this.$message.error('an error appeared')
+      //       console.log(res.msg)
+      //     }
+      //   })
+      axios({
+        method:'get',
+        url:'http://127.0.0.1:8000/webapp/sample/',
+      })
+        .then((response) =>{
+          var res = JSON.parse(JSON.stringify(response.data))
+          if (res.status === 0) {
+            this.bookList = res.list
           } else {
-            this.$message.error('查询书籍失败')
-            console.log(res['msg'])
+            this.$message.error('an error appeared')
+            console.log(res.msg)
           }
         })
     }
