@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <el-row display="margin-top:10px">
-        <el-input v-model="input" placeholder="请输入书名" style="display:inline-table; width: 30%; float:left"></el-input>
+        <el-input v-model="input" placeholder="input name" style="display:inline-table; width: 30%; float:left"></el-input>
         <el-button type="primary" @click="add()" style="float:left; margin: 2px;">新增</el-button>
     </el-row>
     <el-row>
@@ -9,7 +9,7 @@
           <el-table-column prop="id" label="编号" min-width="100">
             <template scope="scope"> {{ scope.row.pk }} </template>
           </el-table-column>
-          <el-table-column prop="book_name" label="Samples" min-width="100">
+          <el-table-column prop="name" label="Samples" min-width="100">
             <template scope="scope"> {{ scope.row.fields.name }} </template>
           </el-table-column>
           <el-table-column prop="add_time" label="添加时间" min-width="100">
@@ -22,7 +22,6 @@
 
 <script>
 import axios from 'axios'
-import Vue from 'vue'
 export default {
   name: 'home',
   data () {
@@ -58,16 +57,6 @@ export default {
       console.log('test')
     },
     show: function () {
-      // axios.get('http://127.0.0.1:8000/webapp/sample/')
-      //   .then((response) => {
-      //     var res = JSON.parse(JSON.stringify(response.data))
-      //     if (res.status === 0) {
-      //       this.bookList = res.list
-      //     } else {
-      //       this.$message.error('an error appeared')
-      //       console.log(res.msg)
-      //     }
-      //   })
       axios({
         method:'get',
         url:'http://127.0.0.1:8000/webapp/sample/',
